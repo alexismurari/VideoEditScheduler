@@ -29,16 +29,16 @@ def main():
 
         body=dict(
             snippet=dict(
-                title=options.title,
-                description=options.description,
-                tags=tags,
-                categoryId=options.category
+                title="csgo",
+                description="",
+                tags="csgo",
+                categoryId="20"
             ),
             status=dict(
-                privacyStatus=options.privacyStatus
+                privacyStatus="private",
+                publishAt="2022-11-01T8:20:00.000+00:00"
             )
         ),
-
         # body={
         #   "snippet": {
         #     "categoryId": "22",
@@ -52,7 +52,7 @@ def main():
         
         # TODO: For this request to work, you must replace "YOUR_FILE"
         #       with a pointer to the actual file you are uploading.
-        media_body=MediaFileUpload("YOUR_FILE")
+        media_body=MediaFileUpload("edit/csgo.mp4")
     )
     response = request.execute()
 
