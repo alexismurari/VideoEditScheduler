@@ -20,14 +20,14 @@ def schedule_video(path, video, month, day, hour, youtube):
         body=dict(
             snippet=dict(
                 title=video + " #shorts",
-                description="Best Gaming Clips!",
+                description="Best Gaming Clips! #shorts #shortsvideo #shortsfeed #shortsyoutube #comedy #news",
                 tags="csgo, valorant, gaming, clips, memes, gameplay, gamer, pc, youtubegaming channel",
                 categoryId="20"
             ),
             status=dict(
                 privacyStatus="private",
                 selfDeclaredMadeForKids = "false",
-                publishAt="2022-" + month + "-" + day + "T" + str(hour) + ":0:00.000+00:00"
+                publishAt="2022-" + month + "-" + day + "T" + str(hour) + ":0:00.000-04:00"
                 #publishAt="2022-11-01T8:0:00.000+00:00"
             )
         ),
@@ -38,7 +38,7 @@ def schedule_video(path, video, month, day, hour, youtube):
     print(response)
 
 
-def main(args):
+def schedule(args):
     new_videos_path = args.src
     new_videos = [f for f in listdir(new_videos_path) if isfile(join(new_videos_path, f))]
     print(new_videos)
@@ -60,13 +60,13 @@ def main(args):
 
 
     month = "08"
-    day = "01"
-    hour = 0
+    day = "02"
+    hour = 12
 
     while int(day) < 31:
         for vid in new_videos:
             schedule_video(new_videos_path, vid, month, day, hour, youtube)
-            hour += 1
+            hour += 4
             if hour == 24:
                 day = str(int(day) + 1)
                 if day <= str(9): day = "0" + day
@@ -75,11 +75,19 @@ def main(args):
             print(month, day, hour)
 
 
-if __name__ == "__main__":
+def parser_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", action="store_true", help="archive mode", default=False)
     parser.add_argument("src", help="Source location")
     parser.add_argument("dest", help="Destination location")
     args = parser.parse_args()
 
-    main(args)
+    return args
+
+def main():
+    args = parser_args()
+    schedule(args)
+
+
+if __name__ == "__main__":
+    main()
