@@ -22,14 +22,13 @@ def schedule_video(path, video, month, day, hour, youtube):
             snippet=dict(
                 title=video[:-4] + " #shorts",
                 description="Best Gaming Clips! #shorts #shortsvideo #shortsfeed #shortsyoutube #comedy #news",
-                tags="csgo, valorant, gaming, clips, memes, gameplay, gamer, pc, youtubegaming channel, overwatch, apex, legends, apex legends",
+                tags="csgo, valorant, gaming, clips, memes, gameplay, gamer, pc, youtubegaming channel",
                 categoryId="20"
             ),
             status=dict(
                 privacyStatus="private",
                 selfDeclaredMadeForKids = "false",
                 publishAt="2022-" + month + "-" + day + "T" + str(hour) + ":0:00.000-04:00"
-                #publishAt="2022-11-01T8:0:00.000+00:00"
             )
         ),
         media_body=MediaFileUpload(path + video)
@@ -47,8 +46,6 @@ def get_creds(credentials):
         with open('token.pickle', 'rb') as token:
             print("Yes again")
             credentials = pickle.load(token)
-    
-    print(credentials)
 
     if not credentials or not credentials.valid:
         if credentials and credentials.expired and credentials.refresh_token:
@@ -57,46 +54,22 @@ def get_creds(credentials):
             flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
         client_secrets_file, scopes)
 
-        flow.run_local_server(port=8080, prompt="consent", authorization_prompt_message="")
+            flow.run_local_server(port=8080, prompt="consent", authorization_prompt_message="")
 
-        credentials = flow.credentials
+            credentials = flow.credentials
 
-        with open('token.pickle', 'wb') as f:
-            pickle.dump(credentials, f)
+            with open('token.pickle', 'wb') as f:
+                pickle.dump(credentials, f)
 
     print(credentials)
 
     return credentials
 
-    # # Disable OAuthlib's HTTPS verification when running locally.
-    # # *DO NOT* leave this option enabled in production.
-    # os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-
-    # api_service_name = "youtube"
-    # api_version = "v3"
-    
-    # # Get credentials and create an API client
-    # flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-    #     client_secrets_file, scopes)
-    # credentials = flow.run_console()
-    # youtube = googleapiclient.discovery.build(
-    #     api_service_name, api_version, credentials=credentials)
-
-    # flow.run_local_server(port=8080, prompt="consent", authorization_prompt_message="")
-
-    # creds = flow.credentials
-
-    # print(creds.to_json)
-    
 
 
-
-
-
-def schedule(args):
+def schedule(new_videos_path):
     credentials = None
-
-    new_videos_path = args.src
+ 
     new_videos = [f for f in listdir(new_videos_path) if isfile(join(new_videos_path, f))]
     print(new_videos)
 
@@ -135,7 +108,8 @@ def parser_args():
 
 def main():
     args = parser_args()
-    schedule(args)
+    new_videos_path = args.src
+    schedule(new_videos_path)
 
 
 if __name__ == "__main__":
