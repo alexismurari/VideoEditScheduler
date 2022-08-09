@@ -5,33 +5,38 @@ from PyQt6.QtGui import *
 from ui.widgets import DirectoryFinder
 from schedule.publish import schedule
 
-
 class MainWindow(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # For custom stylesheets
+        # sshFile="static/styles/style.qss"
+        # with open(sshFile,"r") as fh:
+        #     self.setStyleSheet(fh.read())
+
         self.setWindowTitle("VideoEdit")
-        width = 300
-        height = 400
+        width = 350
         self.setMinimumWidth(width)
-
-        username_label = QLabel("Username")
-        username_input = QLineEdit()
-        start_button = QPushButton("Start")
-        self.directory_widget = DirectoryFinder()
-        self.calendar = QCalendarWidget()
-
-        
 
         layout = QVBoxLayout()
 
-        username_layout = QHBoxLayout()
-        username_layout.addWidget(username_label)
-        username_layout.addWidget(username_input)
-        layout.addLayout(username_layout)
+        desc_input = QTextEdit()
+        tags_input = QLineEdit()
+
+        start_button = QPushButton("Start")
+        self.directory_widget = DirectoryFinder()
+        self.calendar = QCalendarWidget()
+        self.time = QTimeEdit()
+
+        layout_form = QFormLayout()
+
+        layout_form.addRow("Description", desc_input)
+        layout_form.addRow("Tags", tags_input)
+        layout.addLayout(layout_form)
 
         layout.addWidget(self.directory_widget)
         layout.addWidget(self.calendar)
+        layout.addWidget(self.time)
         layout.addWidget(start_button)
         
         self.setLayout(layout)
