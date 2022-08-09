@@ -15,7 +15,7 @@ class DirectoryFinder(QWidget):
         self.folder_line.setEnabled(False)
         layout.addWidget(self.folder_line)
 
-        folder_button = QToolButton()
+        folder_button = QPushButton("...")
         folder_button.clicked.connect(self.button_clicked)
         layout.addWidget(folder_button)
 
