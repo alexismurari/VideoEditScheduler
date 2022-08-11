@@ -31,7 +31,7 @@ def schedule_video(path, video, month, day, hour, youtube):
                 publishAt="2022-" + month + "-" + day + "T" + str(hour) + ":0:00.000-04:00"
             )
         ),
-        media_body=MediaFileUpload(path + video)
+        media_body=MediaFileUpload(path + "/" + video)
     )
     response = request.execute()
 
@@ -39,10 +39,10 @@ def schedule_video(path, video, month, day, hour, youtube):
 
 
 def get_creds(credentials):
-    client_secrets_file = "client_secret.json"
+    client_secrets_file = "schedule/client_secret.json"
 
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists('schedule/token.pickle'):
+        with open('schedule/token.pickle', 'rb') as token:
             credentials = pickle.load(token)
 
     if not credentials or not credentials.valid:
@@ -56,7 +56,7 @@ def get_creds(credentials):
 
             credentials = flow.credentials
 
-            with open('token.pickle', 'wb') as f:
+            with open('schedule/token.pickle', 'wb') as f:
                 pickle.dump(credentials, f)
 
     print(credentials)
@@ -65,7 +65,8 @@ def get_creds(credentials):
 
 
 
-def schedule(new_videos_path):
+def schedule(new_videos_path, date = (0,0,0)):
+    print("Opened: ", new_videos_path)
     credentials = None
     
     new_videos = [f for f in listdir(new_videos_path) if isfile(join(new_videos_path, f))]
@@ -79,13 +80,13 @@ def schedule(new_videos_path):
     youtube = googleapiclient.discovery.build(
     api_service_name, api_version, credentials=credentials)
 
-    month = "08"
-    day = "06"
-    hour = 6
+    month = str(date[1])
+    day = str(date[2])
+    hour = 0
 
     for vid in new_videos:
         schedule_video(new_videos_path, vid, month, day, hour, youtube)
-        hour += 0
+        hour += 3
         if hour == 24:
             day = str(int(day) + 1)
             if day <= str(9): day = "0" + day
