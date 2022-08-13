@@ -27,3 +27,30 @@ class DirectoryFinder(QWidget):
     def button_clicked(self):
         self.file_directory = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         self.folder_line.setText('{}'.format(self.file_directory))
+
+
+class FileFinder(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        layout = QHBoxLayout()
+
+        file_label = QLabel("File")
+        layout.addWidget(file_label)
+        
+        self.file_line = QLineEdit("Select File")
+        self.file_line.setEnabled(False)
+        layout.addWidget(self.file_line)
+
+        file_button = QPushButton("...")
+        file_button.clicked.connect(self.button_clicked)
+        layout.addWidget(file_button)
+
+        layout.setContentsMargins(0,0,0,0)
+        self.setLayout(layout)
+
+        self.file_path = None
+
+    def button_clicked(self):
+        self.file_path = str(QFileDialog.getOpenFileUrl(self, "Select Directory"))
+        self.file_line.setText('{}'.format(self.file_path))
