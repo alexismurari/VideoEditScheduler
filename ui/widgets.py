@@ -52,5 +52,5 @@ class FileFinder(QWidget):
         self.file_path = None
 
     def button_clicked(self):
-        self.file_path = str(QFileDialog.getOpenFileUrl(self, "Select Directory"))
-        self.file_line.setText('{}'.format(self.file_path))
+        self.file_path = str(QFileDialog.getOpenFileName(self, "Select File")[0])
+        self.file_line.setText(self.file_path)
