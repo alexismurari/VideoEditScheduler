@@ -19,35 +19,59 @@ class MainWindow(QWidget):
         width = 350
         self.setMinimumWidth(width)
 
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
 
         desc_input = QTextEdit()
         tags_input = QLineEdit()
 
         start_button = QPushButton("Start")
-        #self.selection = QRadioButton()
         self.directory_widget = DirectoryFinder()
         self.file_widget = FileFinder()
         self.calendar = QCalendarWidget()
         self.time = QTimeEdit()
 
+        selection_layout = QHBoxLayout()
+        self.selection_file = QRadioButton("Single Video")
+        self.selection_file.setChecked(True)
+        self.selection_file.toggled.connect(lambda:self.swap_filefolder(self.selection_file))
+
+        self.selection_folder = QRadioButton("Folder")
+        self.selection_file.toggled.connect(lambda:self.swap_filefolder(self.selection_folder))
+
+        selection_layout.addWidget(self.selection_file)
+        selection_layout.addWidget(self.selection_folder)
+
         layout_form = QFormLayout()
 
         layout_form.addRow("Description", desc_input)
         layout_form.addRow("Tags", tags_input)
-        layout.addLayout(layout_form)
+        self.layout.addLayout(layout_form)
 
-        #layout.addWidget(self.selection)
-        layout.addWidget(self.directory_widget)
-        layout.addWidget(self.file_widget)
-        layout.addWidget(self.calendar)
-        layout.addWidget(self.time)
-        layout.addWidget(start_button)
+        self.layout.addLayout(selection_layout)
+        self.layout.addWidget(self.file_widget)
+
+        self.layout.addWidget(self.calendar)
+        self.layout.addWidget(self.time)
+        self.layout.addWidget(start_button)
         
-        self.setLayout(layout)
+        self.setLayout(self.layout)
 
         start_button.clicked.connect(self.start_scheduling)
 
     def start_scheduling(self):
         date = self.calendar.selectedDate().getDate()
         schedule(self.directory_widget.file_directory, date)
+
+    def swap_filefolder(self, state):
+
+        if state.text() == "Single Video":
+            if state.isChecked():
+                self.layout.insertWidget(len(self.layout)-3, self.file_widget)
+                self.directory_widget.deleteLater()
+                self.directory_widget = DirectoryFinder()
+        if state.text() == "Folder":
+            if state.isChecked():
+                self.layout.insertWidget(len(self.layout)-3, self.directory_widget)
+                self.file_widget.deleteLater()
+                self.file_widget = FileFinder()
+                
