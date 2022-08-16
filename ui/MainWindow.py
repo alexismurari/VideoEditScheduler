@@ -59,8 +59,14 @@ class MainWindow(QWidget):
         start_button.clicked.connect(self.start_scheduling)
 
     def start_scheduling(self):
+        # File handling not supported in publish.py
+        if(print(self.selection_file.isChecked())):
+            print("Feature not supported")
+            return
+
         date = self.calendar.selectedDate().getDate()
-        schedule(self.directory_widget.file_directory, date)
+        time = (self.time.time().hour(), self.time.time().minute())
+        schedule(self.directory_widget.file_directory, date, time)
 
     def swap_filefolder(self, state):
 
