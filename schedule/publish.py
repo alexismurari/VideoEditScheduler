@@ -12,9 +12,22 @@ import googleapiclient.errors
 from google.auth.transport.requests import Request
 from googleapiclient.http import MediaFileUpload
 
+from  datetime import datetime, timezone
+
 scopes = ["https://www.googleapis.com/auth/youtube.upload"]
 
-def schedule_video(path, video, month, day, hour, youtube):
+
+def convert_time(date, time):
+    
+    year, month, day = date
+    hour, minute = time
+    isoTime = datetime(year,month,day,hour,minute,0, 0)
+    isoTime = isoTime.astimezone()
+
+    return isoTime.isoformat()
+
+def schedule_video(path, video, time, youtube):
+
     request = youtube.videos().insert(
         part="snippet,status",
 
@@ -28,7 +41,7 @@ def schedule_video(path, video, month, day, hour, youtube):
             status=dict(
                 privacyStatus="private",
                 selfDeclaredMadeForKids = "false",
-                publishAt="2022-" + month + "-" + day + "T" + str(hour) + ":0:00.000-04:00"
+                publishAt=time
             )
         ),
         media_body=MediaFileUpload(path + "/" + video)
@@ -59,13 +72,11 @@ def get_creds(credentials):
             with open('schedule/token.pickle', 'wb') as f:
                 pickle.dump(credentials, f)
 
-    print(credentials)
-
     return credentials
 
 
 
-def schedule(new_videos_path, date = (0,0,0)):
+def schedule(new_videos_path, date, time):
     print("Opened: ", new_videos_path)
     credentials = None
     
@@ -73,26 +84,19 @@ def schedule(new_videos_path, date = (0,0,0)):
     print(new_videos)
 
     credentials = get_creds(credentials)
-
+    
+    publishTime = convert_time(date, time)
 
     api_service_name = "youtube"
     api_version = "v3"
     youtube = googleapiclient.discovery.build(
     api_service_name, api_version, credentials=credentials)
 
-    month = str(date[1])
-    day = str(date[2])
-    hour = 0
-
     for vid in new_videos:
-        schedule_video(new_videos_path, vid, month, day, hour, youtube)
-        hour += 3
-        if hour == 24:
-            day = str(int(day) + 1)
-            if day <= str(9): day = "0" + day
-        hour = mod(hour, 24)
-
-        print(month, day, hour)
+        publishTime = convert_time(date, time)
+        date[2] += 1
+        schedule_video(new_videos_path, vid, publishTime, youtube)
+        print(date, time)
 
 
 def parser_args():
