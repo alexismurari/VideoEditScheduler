@@ -64,7 +64,7 @@ class MainWindow(QWidget):
             print("Feature not supported")
             return
 
-        date = self.calendar.selectedDate().getDate()
+        date = list(self.calendar.selectedDate().getDate())
         time = (self.time.time().hour(), self.time.time().minute())
         schedule(self.directory_widget.file_directory, date, time)
 
