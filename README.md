@@ -7,7 +7,7 @@ I created this project mainly to play around with the different APIs Google, Twi
 
 ## Screenshots 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/60163267/185815338-5fce8701-0cb6-4a7c-ac9a-f0f4060e6dee.PNG">!
+<img src="https://user-images.githubusercontent.com/60163267/185815338-5fce8701-0cb6-4a7c-ac9a-f0f4060e6dee.PNG">
 </p>
 
 ## Table of Contents
