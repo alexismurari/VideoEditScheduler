@@ -58,5 +58,3 @@ Please note that the virtual environment must still be active for this to work.
 
 ## Notes <a name="notes"></a>
 The video editor section found in [`/editor/video.py`](https://github.com/alexismurari/videoedit/blob/main/editor/video.py) is not connected to the GUI yet.
-
-## Todo <a name="todo"></a>
