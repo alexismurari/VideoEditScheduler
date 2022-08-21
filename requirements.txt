@@ -1,0 +1,6 @@
+google_api_python_client==2.57.0
+google_auth_oauthlib==0.5.2
+moviepy==1.0.3
+protobuf==4.21.5
+PyQt6==6.3.1
+qt_material==2.12
