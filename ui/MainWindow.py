@@ -1,4 +1,3 @@
-from inspect import getmembers
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
@@ -15,14 +14,24 @@ class MainWindow(QWidget):
         # with open(sshFile,"r") as fh:
         #     self.setStyleSheet(fh.read())
 
+        self.getSettingsValues()
+
         self.setWindowTitle("VideoEdit")
         width = 350
         self.setMinimumWidth(width)
 
+        height = self.setting_window.value('window_height')
+        width = self.setting_window.value('window_width')
+
         self.layout = QVBoxLayout()
 
-        desc_input = QTextEdit()
-        tags_input = QLineEdit()
+        desc_value = self.setting_variable.value('tags')
+        self.desc_input = QTextEdit()
+        self.desc_input.setText(desc_value)
+
+        tags_value = self.setting_variable.value('tags')
+        self.tags_input = QLineEdit()
+        self.tags_input.setText(tags_value)
 
         start_button = QPushButton("Start")
         self.directory_widget = DirectoryFinder()
@@ -43,8 +52,8 @@ class MainWindow(QWidget):
 
         layout_form = QFormLayout()
 
-        layout_form.addRow("Description", desc_input)
-        layout_form.addRow("Tags", tags_input)
+        layout_form.addRow("Description", self.desc_input)
+        layout_form.addRow("Tags", self.tags_input)
         self.layout.addLayout(layout_form)
 
         self.layout.addLayout(selection_layout)
@@ -81,3 +90,15 @@ class MainWindow(QWidget):
                 self.file_widget.deleteLater()
                 self.file_widget = FileFinder()
                 
+
+    def getSettingsValues(self):
+        self.setting_window = QSettings('videoedit', 'Window Size')
+        self.setting_variable = QSettings('videoedit', 'Variables')
+        print(self.setting_variable.fileName())
+
+    def closeEvent(self, event):
+        self.setting_window.setValue('window_height', self.rect().height())
+        self.setting_window.setValue('window_width', self.rect().width())
+        self.setting_variable.setValue('tags', self.tags_input.text())
+        self.setting_variable.setValue('desc', self.desc_input.toPlainText())
+        
