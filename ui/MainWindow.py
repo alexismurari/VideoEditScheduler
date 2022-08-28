@@ -25,7 +25,7 @@ class MainWindow(QWidget):
 
         self.layout = QVBoxLayout()
 
-        desc_value = self.setting_variable.value('tags')
+        desc_value = self.setting_variable.value('desc')
         self.desc_input = QTextEdit()
         self.desc_input.setText(desc_value)
 
